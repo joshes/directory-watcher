@@ -3,3 +3,5 @@
 atlassian-ide-plugin.xml
 *.iml
 dependency-reduced-pom.xml
+release.properties
+pom.xml.*
