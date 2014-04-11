@@ -13,3 +13,5 @@ Slightly modified Java directory watcher sample.
 ```sh
 java -jar DirectoryWatcher.jar -watch /Users/joshes/test -filter ".*?sub_dir\/?.*?" -callback "echo '%event% - %file%'"
 ```
+
+[![Build Status](https://travis-ci.org/joshes/directory-watcher.svg?branch=master)](https://travis-ci.org/joshes/directory-watcher)
