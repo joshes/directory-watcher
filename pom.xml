@@ -7,8 +7,8 @@
     <version>1.0</version>
 
     <scm>
-        <connection>scm:git:git@github.com/joshes/directory-watcher.git</connection>
-        <developerConnection>scm:git:git@github.com/joshes/directory-watcher.git</developerConnection>
+        <connection>scm:git:git@github.com:joshes/directory-watcher.git</connection>
+        <developerConnection>scm:git:git@github.com:joshes/directory-watcher.git</developerConnection>
         <url>https://github.com/joshes/directory-watcher</url>
     </scm>
 
