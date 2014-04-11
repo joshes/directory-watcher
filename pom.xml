@@ -10,7 +10,7 @@
 
     <scm>
         <connection>scm:git:git@github.com/joshes/directory-watcher.git</connection>
-        <developerConnection>scm:scm:git:git@github.com/joshes/directory-watcher.git</developerConnection>
+        <developerConnection>scm:git:git@github.com/joshes/directory-watcher.git</developerConnection>
         <url>https://github.com/joshes/directory-watcher</url>
     </scm>
 
