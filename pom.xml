@@ -9,8 +9,8 @@
     <version>1.0-SNAPSHOT</version>
 
     <scm>
-        <connection>scm:git:git@github.com/joshes/directory-watcher.git</connection>
-        <developerConnection>scm:git:git@github.com/joshes/directory-watcher.git</developerConnection>
+        <connection>scm:git:ssh://github.com/joshes/directory-watcher.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/joshes/directory-watcher.git</developerConnection>
         <url>https://github.com/joshes/directory-watcher</url>
     </scm>
 
