@@ -1,7 +1,7 @@
 Directory Watcher
 =================
 
-Slightly modified Java directory watcher sample.
+Modified Java directory watcher example, made to be generic and useful.
 
 ## Changes
 
