@@ -71,7 +71,7 @@ public class DirectoryWatcher {
 
     private final WatchService watcher;
     private final Map<WatchKey, Path> keys;
-    private boolean trace = true;
+    private boolean trace = false;
     private final String exec;
     private final Pattern filterPattern;
 
@@ -119,26 +119,26 @@ public class DirectoryWatcher {
     /**
      * Creates a WatchService and registers the given directory
      */
-    DirectoryWatcher(Path dir, String filter, String exec) throws IOException {
+    DirectoryWatcher(Path dir, String filter, String exec, boolean debug) throws IOException {
         this.watcher = FileSystems.getDefault().newWatchService();
         this.keys = new HashMap<WatchKey, Path>();
         this.exec = exec;
+        this.trace = debug;
+
         if (null != filter && !filter.isEmpty()) {
-//            filter = filter.replace("\\", "\\\\");
             this.filterPattern = Pattern.compile(filter);
         } else this.filterPattern = null;
 
         System.out.format("Scanning %s ...\n", dir);
         registerAll(dir);
         System.out.println("Done.");
-
-        // enable trace after initial registration
-        this.trace = true;
     }
 
     boolean isWatchable(String path) {
         boolean matches = filterPattern.matcher(path).matches();
-        System.out.println(String.format("%s matches: %s", path, matches));
+        if (trace) {
+            System.out.println(String.format("%s matches: %s", path, matches));
+        }
         return matches;
     }
 
@@ -197,7 +197,9 @@ public class DirectoryWatcher {
                         cmd = cmd.replaceAll("%event%", event.kind().name());
                     }
                     try {
-                        System.out.println("exec:" + cmd);
+                        if (trace) {
+                            System.out.println("exec:" + cmd);
+                        }
                         Process proc = Runtime.getRuntime().exec(cmd);
                         String line;
                         BufferedReader in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
@@ -224,17 +226,6 @@ public class DirectoryWatcher {
         }
     }
 
-    private static void usage() {
-        System.err.println("Watches local files found under **/jcr_root/**");
-        System.err.println("  Usage: java DirectoryWatcher dir exec");
-        System.err.println("  'exec' should be wrapped in double-quotes and will have the following tokens replaced if supplied:");
-        System.err.println("  %file%    - the file that spawned a watched event");
-        System.err.println("  %event%   - the event type. Aligns with Event.Kind.Name");
-        System.err.println("");
-        System.err.println("Example: java DirectoryWatcher /files \"echo %file%\"");
-        System.exit(-1);
-    }
-
     private static Options getOptions() {
         final Options opts = new Options();
 
@@ -256,9 +247,16 @@ public class DirectoryWatcher {
                 .withDescription("Callback to be executed - can contain callback vars (%file% | %event%)")
                 .create("callback");
 
+        final Option debugOpt = OptionBuilder
+                .withArgName("debug")
+                .hasOptionalArg()
+                .withDescription("Enables debug logging")
+                .create("debug");
+
         opts.addOption(watchOpt);
         opts.addOption(filterOpt);
         opts.addOption(callbackOpt);
+        opts.addOption(debugOpt);
         return opts;
     }
 
@@ -273,8 +271,9 @@ public class DirectoryWatcher {
         final Path watchDir = Paths.get(line.getOptionValue("watch"));
         final String filter = line.getOptionValue("filter");
         final String callback = line.getOptionValue("callback");
+        final boolean debug = Boolean.parseBoolean(line.getOptionValue("debug", "false"));
 
         // register directory and process its events
-        new DirectoryWatcher(watchDir, filter, callback).processEvents();
+        new DirectoryWatcher(watchDir, filter, callback, debug).processEvents();
     }
 }
